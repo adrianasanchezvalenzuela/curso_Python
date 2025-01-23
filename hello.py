@@ -1,2 +1,3 @@
-#Mi primer programita de hola mundo en Python
+#Mi primer programita de Hola Mundo en Python
 print("Hello world")
+print("Hola 'Adriana'!")
