@@ -13,20 +13,64 @@ def dibuja_tablero(simbolos:dict):
           ----------
           {simbolos['7']} | {simbolos['8']} | {simbolos['9']}
           ''')
-    
-def ia(simbolos:dict):
+
+'''
+Funcion para una lista de casillas libres para la ia
+'''
+def casillas_libres(simbolos: dict):
+    '''
+    Devuelve una lista con casillas que todavia estan disponibles
+    '''
+    return [key for key, value in simbolos.items() if value not in ['X','O']]
+
+def ia(simbolos:dict, lista_combinaciones: list, simbolo_ia:str, simbolo_usuario: str):
     ''' Juega la maquina'''
-    ocupado = True
-    while ocupado == True:
-        x = random.choice(list(simbolos.keys()))
-        if simbolos[x] not in ['X', 'O']:
-            simbolos[x] = 'O'
-            ocupado = False
+    print("Turno de la maquina")
+    casillas = casillas_libres(simbolos)
+
+    '''
+    La IA busca ganar en la siguiente jugada
+    '''
+    for c in casillas:
+        simbolos_copia = simbolos.copy()
+        simbolos_copia[c] = simbolo_ia
+        if check_winner(simbolos_copia, lista_combinaciones) == simbolo_ia:
+            simbolos[c] = simbolo_ia
+            return
+        
+    '''
+    La IA bloquea al jugador si va a ganar
+    '''
+    for c in casillas:
+        simbolos_copia = simbolos.copy()
+        simbolos_copia[c] = simbolo_usuario
+        if check_winner(simbolos_copia, lista_combinaciones) == simbolo_usuario:
+            simbolos[c] = simbolo_ia
+            return
+        
+    '''
+    La IA da preferencia al centro si esta disponible
+    '''
+    if '5' in casillas:
+        simbolos['5'] = simbolo_ia
+        return
+    
+    '''
+    La IA da preferencia a las esquinas
+    '''
+    esquinas = ['1', '3', '7', '9']
+    esquinas_libres = [c for c in casillas if c in esquinas]
+    if esquinas_libres:
+        simbolos[random.choice(esquinas_libres)] = simbolo_ia
+        return
+    
+    '''
+    La IA escoge al al azar si no hay jugada
+    '''
+    simbolos[random.choice(casillas)] = simbolo_ia
 
 
-
-
-def usuario(simbolos:dict):
+def usuario(simbolos:dict, simbolo_usuario: str):
     ''' Juega el usuario'''
     lista_numeros = [str(i) for i in range(1,10)] #del 1 al 9
     ocupado = True
@@ -34,7 +78,7 @@ def usuario(simbolos:dict):
         x = input('Ingresa el número de la casilla: ')
         if x in lista_numeros:
             if simbolos[x] not in ['X','O']:
-                simbolos[x] = 'X'
+                simbolos[x] = simbolo_usuario
                 ocupado = False
             else:
                 print('Casilla ocupada')
@@ -42,7 +86,7 @@ def usuario(simbolos:dict):
             print('Numero incorrecto')
 
 
-def juego(simbolos:dict):
+def juego(simbolos:dict, simbolo_usuario: str, simbolo_ia: str):
     '''
     Juego del gato
     '''
@@ -58,12 +102,17 @@ def juego(simbolos:dict):
     ]
     
     en_juego = True
-    dibuja_tablero(simbolos)
     movimientos = 0
     gana = None
+    dibuja_tablero(simbolos)
     while en_juego:
-        usuario(simbolos)
-        dibuja_tablero(simbolos)
+        if movimientos % 2 == 0: #Si es par es el turno de usuario
+            usuario(simbolos, simbolo_usuario)
+
+        else: #Si es impar, es el turno de la IA
+            ia(simbolos, lista_combinaciones, simbolo_ia, simbolo_usuario)
+
+
         movimientos += 1
         gana = check_winner(simbolos, lista_combinaciones)
         if gana is not None:
@@ -72,20 +121,20 @@ def juego(simbolos:dict):
         if movimientos >= 9:
             en_juego=False
             continue
-        ia(simbolos)
+        
+        ia(simbolos, lista_combinaciones,simbolo_ia, simbolo_usuario)
         dibuja_tablero(simbolos)
         movimientos += 1
-        gana = check_winner(simbolos,lista_combinaciones)
+        gana = check_winner(simbolos, lista_combinaciones)
         if gana is not None:
-            en_juego=False
-            continue
-        if movimientos >= 9:
             en_juego = False
             continue
+        if movimientos>=9:
+            en_juego = False
+            continue
+        dibuja_tablero(simbolos)
+        
     return gana
-
-
-
 
 def check_winner(simbolos:dict,combinaciones:list):
     '''
