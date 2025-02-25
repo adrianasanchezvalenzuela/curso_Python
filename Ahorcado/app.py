@@ -23,11 +23,11 @@ def main(archivo_texto:str, nombre_plantilla='plantilla'):
     while o > 0:
         fn.despliega_plantilla(plantillas,o)
         fn.adivina_letra(abcdario, p, adivinadas, o)
-        o= fn.adivina_letra(abcdario,p,adivinadas,o)
+        o= fn.adivina_letra(abcdario,p, adivinadas,o)
         if p == ''.join([letra if letra in adivinadas else '_' for letra in p]):
             print('Ganaste')
             break
-        o -= 1
+        #o -= 1
     fn.despliega_plantilla(plantillas,o)
     print(f"La palabra era: {p}")
 
@@ -41,3 +41,4 @@ if __name__ == '__main__':
         exit()
     #archivo = './datos/pg15532.txt'
     main(archivo)
+

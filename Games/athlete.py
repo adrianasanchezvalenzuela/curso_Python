@@ -13,6 +13,9 @@ class Athlete:
     
     def display(self):
         print(f"{self.name}")
+
+    def to_json(self):
+        return {"name":self.name}
     
 
 if __name__ == "__main__":
@@ -26,3 +29,6 @@ if __name__ == "__main__":
     b = eval(b)
     print(b)
     print(f"b: {id(b)}")
+
+
+#codigo para sumar

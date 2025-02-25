@@ -34,7 +34,7 @@ def despliega_plantilla(diccionario:dict,nivel:int):
 
 def obten_palabras(lista:list)->list:
     '''
-    Obtiene las palabras
+    Obtiene las palabras de un texto
     '''
     texto = ' '.join(lista[120:])
     palabras = texto.split()
@@ -62,10 +62,11 @@ def adivina_letra(abc:dict, palabra:str, letras_adivinadas:set, turnos:int)->int
 
     print(f'Tienes {turnos} oportunidades de fallar')
     abcd = ' '.join(abc.values())
-    print(f'La palabra es {palabra_oculta}')
     print(f'El abecedario es {abcd}')
+    print(f'La palabra es {palabra_oculta}')
+
     letra = input('Ingresa una letra: ')
-    letra = letra.lower
+    letra = letra.lower()
     if letra in abc:
         if abc[letra] == "*":
             print('Ya adivinaste esa letra')
