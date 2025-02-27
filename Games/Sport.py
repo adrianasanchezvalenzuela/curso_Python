@@ -27,7 +27,7 @@ class Sport:
         """
         Convertir Sport a JSON
         """
-        return {"name":self.name, "players": self.players, "league":self.league}
+        return {"name":self.name,"players":self.players,"league":self.league}
     
 if __name__ == "__main__":
     s = Sport("Football",11,"FIFA")
