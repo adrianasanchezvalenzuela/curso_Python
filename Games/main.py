@@ -9,7 +9,7 @@ def main(archivo_torneo:str):
     Funcion principal ed games
     """
     if archivo_torneo != "":
-        with (open(archivo_torneo, "r", encoding="utf-8")) as f:
+        with (open(archivo_torneo,"r", encoding="utf-8")) as f:
             torneo = json.load(archivo_torneo)
     else:
         players_mexico = ['Chicharito', 'Chucky', 'Tecatito', 'Guardado', 'Herrera', 'Layun', 'Moreno', 'Arujo', 'Oribe', 'Jimenez']
@@ -41,10 +41,10 @@ def main(archivo_torneo:str):
         torneo = list(d.values())
         #juego = Game(mexico, espania)
         #torneo = [juego.to_json()]
-        archivo = "torneo.json"
-        with (open(archivo, "w", encoding="utf-8")) as f:
-            json.dump(torneo, f, ensure_ascii=False, indent=4)
-        print(f"Se escribio {archivo} satifactoriamente")
+        archivo_torneo = "torneo.json"
+        with(open(archivo_torneo,"w",encoding="utf-8")) as f:
+            json.dump(torneo,f,ensure_ascii=False,indent=4)
+        print(f"Se escribió archivo '{archivo_torneo}' satisfactoriamente")
         # Jugar todos los juegos del torneo
     for juego in torneo:
         A = Team(juego['A']['name'], Sport(juego['A']['sport']['name'], juego['A']['sport']['players'], juego['A']['sport']['league']), [Athlete(x['name']) for x in juego['A']['players']])
@@ -57,4 +57,3 @@ def main(archivo_torneo:str):
 if __name__ == "__main__":
     archivo_torneo = ""
     main(archivo_torneo)
- 

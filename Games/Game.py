@@ -6,11 +6,11 @@ from random import choice
 class Game:
     """Class Game: Juego entre dos equipos"""
     sports_dict = {
-        'LMP': [x for x in range(1,11)],
+        'LMP': [x for x in range(0,11)],
         'NBA': [x for x in range(70,121)],
-        'NFL': [x for x in range(3,56)],
+        'NFL': [x for x in range(3,50)],
         'LMX': [x for x in range(0,9)],
-        'MLB': [x for x in range(0,9)],
+        'MLB': [x for x in range(0,11)],
         'FIFA': [x for x in range(0,11)]
     }
     def __init__(self, A:Team, B:Team) -> None:
@@ -31,16 +31,16 @@ class Game:
         self.score[self.B.name] = b
 
     def __str__(self) -> str:
-        """Metodo para representar la clase como string"""
-        return f"""Game: {self.A.name:20s}: {self.score[self.A.name]:3d} - {self.B.name:20s}: {self.score[self.B.name]:3d}"""
-    
+        '''Método para mostrar clase como string'''
+        return f"""Game: {self.A.name:20s}: {self.score[self.A.name]:3d} - {self.B.name:20s} : {self.score[self.B.name]:3d}"""
+ 
     def __repr__(self) -> str:
-        """Metodo para representar la clase como string"""
-        return f"Game(A={repr(self.A)}, B={repr(self.B)}"
-    
-    def to_json(self)->dict:
-        """ Metodo para representar la clase como diccionoario"""
-        return {"A":self.A.to_json,"B":self.B.to_json,"score":self.score}
+        '''Método para representar la clase como string'''
+        return f"Game(A={repr(self.A)},B={repr(self.B)})"
+   
+    def to_json(self) -> dict:
+        '''Método para representar la clase como diccionario'''
+        return {"A":self.A.to_json(),"B":self.B.to_json(),"score":self.score}
     
     
 if __name__ == '__main__':
