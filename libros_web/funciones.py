@@ -12,9 +12,22 @@ def crea_diccionario_titulos(lista:list)->dict:
     '''
     Crea un diccionario con los títulos como clave y el resto de los datos como valores
     '''
-    return {x['Tutulo']: x for x in lista}
+    return {x['title']: x for x in lista}
+
+def busca_en_titulo(diccionario, palabra)->list:
+    '''
+    Busca una palabra en los títulos de un diccionario
+    '''
+    lista = []
+    palabra = palabra.lower()
+    for titulo, libro in diccionario.items():
+        if palabra in titulo.lower():
+            lista.append(libro)
+    return lista
 
 if __name__ == '__main__':
     archivo_csv = 'booklist2000.csv'
     lista_libros = lee_archivo_csv(archivo_csv)
     diccionario_libros = crea_diccionario_titulos(lista_libros)
+    resultado = busca_en_titulo(diccionario_libros, 'rebels')
+    print(resultado)
