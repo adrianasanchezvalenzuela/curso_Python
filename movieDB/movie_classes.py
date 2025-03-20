@@ -87,6 +87,10 @@ class SistemaCine:
         self.peliculas = {}
         self.relaciones = {}
         self.usuarios = {}
+        self.idx_actor = 0
+        self.idx_pelicula = 0
+        self.idx_relacion = 0
+        self.usuario_actual = None
 
     def cargar_csv(self, archivo, clase):
         ''' Carga los datos de un archivo CSV en la base de datos'''
@@ -105,11 +109,33 @@ class SistemaCine:
                 elif clase == User:
                     user = User(**row)
                     self.usuarios[user.username] = user
+        if clase == Actor:
+            self.idx_actor = max(self.actores.keys()) if self.actores else 0
+        elif clase == Pelicula:
+            self.idx_pelicula = max(self.peliculas.keys()) if self.peliculas else 0
+        elif clase == Relaciones:
+            self.idx_relacion = max(self.relaciones.keys()) if self.relaciones else 0
+            
     
     def obtener_peliculas_por_actor(self, id_estrella):
         ''' Devuelve una lista de películas en las que ha trabajado un actor'''
         ids_peliculas = [rel.id_pelicula for rel in self.relaciones.values() if rel.id_estrella == id_estrella]
         return [self.peliculas[id_pelicula] for id_pelicula in ids_peliculas]
+    
+    def obtener_actores_por_pelicula(self, id_pelicula):
+        '''Devuelve una lista de actores que han participado en una pelicula'''
+        ids_actores = [rel.id_estrella for rel in self.relaciones.values() if rel.id_pelicula == id_pelicula]
+        return [self.actores[id_estrella] for id_estrella in ids_actores]
+    
+    def login(self, username, password):
+        ''' Inicia sesión en el sistema'''
+        if username in self.usuarios:
+            user = self.usuarios[username]
+            if user.hash_string(password) == user.password:
+                self.usuario_actual = user
+                return True
+        return False
+
 
 if __name__ == '__main__':
     archivo_actores = "datos/movies_db - actores.csv"
@@ -127,3 +153,14 @@ if __name__ == '__main__':
     lista_peliculas = sistema.obtener_peliculas_por_actor(1)
     for pelicula in lista_peliculas:
         print(pelicula)
+    lista_actores = sistema.obtener_actores_por_pelicula(1)
+    for actor in lista_actores:
+        print(actor.nombre)
+    u = sistema.usuarios['adrisanv']
+    print(type(u))
+    print(u.username)
+    print(u.password)
+    print(u.hash_string(u.password))
+    exito = sistema.login('adrisanv', '12345')
+    print(exito)
+    print(sistema.usuario_actual.username)
