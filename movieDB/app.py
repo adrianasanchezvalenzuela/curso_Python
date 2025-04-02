@@ -33,6 +33,27 @@ def peliculas():
     peliculas = sistema.peliculas.values()
     return render_template('peliculas.html', peliculas = peliculas)
 
+@app.route('/actor/<int:id_actor>') 
+def actor(id_actor):
+    """Muestra información de un actor"""
+    actor = sistema.actores.get(id_actor)  
+    if actor:
+        personajes = sistema.obtener_personajes_por_estrella(id_actor)
+        return render_template('actor.html', actor=actor, lista_peliculas=personajes)
+    else:
+        return "Película no encontrada", 404
+
+
+@app.route('/pelicula/<int:id_pelicula>')
+def pelicula(id_pelicula):
+    """Muestra información de una película"""
+    pelicula = sistema.peliculas.get(id_pelicula)
+    if pelicula:
+        personajes = sistema.obtener_personajes_por_pelicula(id_pelicula)
+        return render_template('pelicula.html', pelicula=pelicula, lista_actores=personajes)
+    else:
+        return "Película no encontrada", 404
  
+
 if __name__ == '__main__':
     app.run(debug=True)

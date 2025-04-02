@@ -136,15 +136,29 @@ class SistemaCine:
             for obj in objetos.values():
                 writer.writerow(obj.to_dict())
    
-    def obtener_peliculas_por_actor(self, id_estrella):
-        '''Devuelve una lista de películas en las que ha participado un actor'''
-        ids_peliculas = [rel.id_pelicula for rel in self.relaciones.values() if rel.id_estrella == id_estrella]
-        return [self.peliculas[id_pelicula] for id_pelicula in ids_peliculas]
- 
-    def obtener_actores_por_pelicula(self, id_pelicula):
-        '''Devuelve una lista de actores que han participado en una película'''
-        ids_actores = [rel.id_estrella for rel in self.relaciones.values() if rel.id_pelicula == id_pelicula]
-        return [self.actores[id_estrella] for id_estrella in ids_actores]
+    def obtener_personajes_por_estrella(self, id_estrella):
+        personajes = []
+        for rel in self.relaciones.values():
+            if rel.id_estrella == id_estrella:
+                pelicula = self.peliculas.get(rel.id_pelicula)
+                if pelicula:
+                    personajes.append({"personaje": rel.personaje, "pelicula": pelicula})
+        return personajes
+
+    def obtener_personajes_por_pelicula(self, id_pelicula):
+        '''Devuelve una lista de actores que han participado en una película y sus personajes'''
+        personajes = []
+        for rel in self.relaciones.values():
+            if rel.id_pelicula == id_pelicula:
+                actor = self.actores.get(rel.id_estrella)
+                if actor:
+                    personajes.append({
+                        'actor': actor,
+                        'personaje': rel.personaje
+                    })
+        return personajes
+    
+    
    
     def login(self,username,password):
         '''Inicia sesión en el sistema'''
@@ -180,7 +194,8 @@ class SistemaCine:
         if self.usuario_actual:
             user = User(username, nombre_completo, email, password)
             self.usuarios[user.username] = user
- 
+
+
  
 if __name__ == '__main__':
     #archivo = "datos/actores.csv"
@@ -233,8 +248,4 @@ if __name__ == '__main__':
         print(f'{actor.id_estrella}: {actor.nombre:35s} - {actor.fecha_nacimiento}')
     sistema.guardar_csv(archivo_actores,sistema.actores)'
     '''
- 
-   
- 
- 
  
